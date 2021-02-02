@@ -6,14 +6,72 @@
     <description>Recent content in Posts on lucas.zhou `Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 02 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://www.noahzhou.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Feb 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.noahzhou.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
-      <title>揭开(keep-alive)神秘面纱- Vue 源码解析</title>
+      <title>Vue- diff 原理分析 （未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-02-vue-diff/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-02-vue-diff/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+    </item>
+    
+    <item>
+      <title>Vue- keep-alive 原理分析 （未完待续）</title>
       <link>http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/</link>
       <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/</guid>
-      <description>定义 使用场景 使用方法 解决方案 踩坑 原理简析 写的不对，还请批评。</description>
+      <description>定义 主要用于保留组件状态或避免重新渲染。 include - 字符串或正则表达式。只有名称匹配的组件会被缓存。 exclude - 字符串或正则表达式。任何名称匹配的组件都不会</description>
+    </item>
+    
+    <item>
+      <title>Vue- nextTick 原理分析 （未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-02-vue-nexttick/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-02-vue-nexttick/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+    </item>
+    
+    <item>
+      <title>Vue- vue-router 原理分析（未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-02-vue-router/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-02-vue-router/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+    </item>
+    
+    <item>
+      <title>Vue- 双向数据绑定 原理分析 （未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-02-vue-data-binding/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-02-vue-data-binding/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+    </item>
+    
+    <item>
+      <title>Vue- 执行顺序 原理分析 （未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-02-vue-zhixingshunxu/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-02-vue-zhixingshunxu/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+    </item>
+    
+    <item>
+      <title>You Don`t Know js - 待定 （未完待续）</title>
+      <link>http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/</link>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/</guid>
+      <description>&amp;hellip;.. 写的不对，还请批评。</description>
     </item>
     
   </channel>

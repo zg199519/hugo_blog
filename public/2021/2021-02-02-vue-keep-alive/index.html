@@ -9,8 +9,8 @@
     <meta name="description" content="夏日里的一把阳光，周光个人博客，Blog @ 周光 464032204@qq.com">
     <meta name="keywords" content="周光，博客，lucas.zhou，blog，前端，全栈，后端">
     
-    
-    
+    <link rel="prev" href="http://www.noahzhou.com/2021/2021-02-02-vue-nexttick/" />
+    <link rel="next" href="http://www.noahzhou.com/2021/2021-02-02-vue-diff/" />
     <link rel="canonical" href="http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -22,10 +22,10 @@
     <title>
         
         
-            揭开(keep-alive)神秘面纱- Vue 源码解析 | lucas.zhou `Blog
+            Vue- keep-alive 原理分析 （未完待续） | lucas.zhou `Blog
         
     </title>
-    <meta name="title" content="揭开(keep-alive)神秘面纱- Vue 源码解析 | lucas.zhou `Blog">
+    <meta name="title" content="Vue- keep-alive 原理分析 （未完待续） | lucas.zhou `Blog">
     
 <link rel="stylesheet" href="/css/main.min.css">
 
@@ -43,9 +43,9 @@
          "@id": "http:\/\/www.noahzhou.com\/"
     },
     "articleSection" : "posts",
-    "name" : "揭开(keep-alive)神秘面纱- Vue 源码解析",
-    "headline" : "揭开(keep-alive)神秘面纱- Vue 源码解析",
-    "description" : "定义 使用场景 使用方法 解决方案 踩坑 原理简析 写的不对，还请批评。",
+    "name" : "Vue- keep-alive 原理分析 （未完待续）",
+    "headline" : "Vue- keep-alive 原理分析 （未完待续）",
+    "description" : "定义 主要用于保留组件状态或避免重新渲染。 include - 字符串或正则表达式。只有名称匹配的组件会被缓存。 exclude - 字符串或正则表达式。任何名称匹配的组件都不会",
     "inLanguage" : "zh-cn",
     "author" : "lucas.zhou",
     "creator" : "lucas.zhou",
@@ -53,10 +53,10 @@
     "accountablePerson" : "lucas.zhou",
     "copyrightHolder" : "lucas.zhou",
     "copyrightYear" : "2021",
-    "datePublished": "2021-02-02 00:00:00 \u002b0000 UTC",
-    "dateModified" : "2021-02-02 00:00:00 \u002b0000 UTC",
+    "datePublished": "2021-02-02 00:00:00 \x2b0000 UTC",
+    "dateModified" : "2021-02-02 00:00:00 \x2b0000 UTC",
     "url" : "http:\/\/www.noahzhou.com\/2021\/2021-02-02-vue-keep-alive\/",
-    "wordCount" : "30",
+    "wordCount" : "2049",
     "keywords" : [ "Vue源码解析", "lucas.zhou `Blog"]
 }
 </script>
@@ -174,7 +174,7 @@
                     
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">揭开(keep-alive)神秘面纱- Vue 源码解析</h1>
+        <h1 class="post-title" itemprop="name headline">Vue- keep-alive 原理分析 （未完待续）</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="http://www.noahzhou.com/" rel="author">lucas.zhou</a> with ♥
                 <span class="post-time">
@@ -196,7 +196,7 @@
                         
                         
                 </span>
-                <span class="post-word-count">30 words</span>
+                <span class="post-word-count">2049 words</span>
         </div>
     </header>
 
@@ -206,8 +206,6 @@
         
         
 
-        
-          <img src="https://wujunze.com/blog-images/r/pic/20201027144234.png" class="featured_image">
         
         
         
@@ -219,11 +217,217 @@
         
 
         <h1 id="定义">定义</h1>
-<h1 id="使用场景">使用场景</h1>
+<p>主要用于保留组件状态或避免重新渲染。</p>
+<p>include - 字符串或正则表达式。只有名称匹配的组件会被缓存。</p>
+<p>exclude - 字符串或正则表达式。任何名称匹配的组件都不会被缓存。</p>
+<p>max - 数字。最多可以缓存多少组件实例。</p>
+<p><code>&lt;keep-alive&gt;</code> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。</p>
+<p>和 <code>&lt;transition&gt; </code>相似，<code>&lt;keep-alive&gt;</code> 是一个抽象组件：</p>
+<p>它自身不会渲染一个 DOM 元素，也不会出现在组件的父组件链中。</p>
+<p>当组件在 <code>&lt;keep-alive&gt; </code>内被切换，它的 <code>activated</code> 和 <code>deactivated</code> 这两个生命周期钩子函数将会被对应执行。</p>
+<p>在 2.2.0 及其更高版本中，<code>activated</code> 和 <code>deactivated</code> 将会在 <code>&lt;keep-alive&gt;</code> 树内的所有嵌套组件中触发。</p>
 <h1 id="使用方法">使用方法</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  &lt;!-- 基本 --&gt;
+  &lt;keep-alive&gt;
+    &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+  &lt;/keep-alive&gt;
+
+  &lt;!-- 多个条件判断的子组件 --&gt;
+  &lt;keep-alive&gt;
+    &lt;comp-a v-if<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;a &gt; 1&#34;</span>&gt;&lt;/comp-a&gt;
+    &lt;comp-b v-else&gt;&lt;/comp-b&gt;
+  &lt;/keep-alive&gt;
+
+  &lt;!-- 和 <span style="color:#e6db74">`</span>&lt;transition&gt;<span style="color:#e6db74">`</span> 一起使用 --&gt;
+  &lt;transition&gt;
+    &lt;keep-alive&gt;
+      &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+    &lt;/keep-alive&gt;
+  &lt;/transition&gt; 
+</code></pre></div><p>注意，<code>&lt;keep-alive&gt;</code> 是用在其一个直属的子组件被开关的情形。如果你在其中有 v-for 则不会工作。如果有上述的多个条件性的子元素，<code>&lt;keep-alive&gt; </code>要求同时只有一个子元素被渲染。</p>
+<blockquote>
+<p><strong>2.1.0 新增</strong> <code>include</code> <strong>and</strong> <code>exclude</code></p>
+</blockquote>
+<p><code>include</code> 和 <code>exclude</code> prop 允许组件有条件地缓存。二者都可以用逗号分隔字符串、正则表达式或一个数组来表示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&lt;!-- 逗号分隔字符串 --&gt;
+&lt;keep-alive include<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;a,b&#34;</span>&gt;
+  &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+
+&lt;!-- 正则表达式 <span style="color:#f92672">(</span>使用 <span style="color:#e6db74">`</span>v-bind<span style="color:#e6db74">`</span><span style="color:#f92672">)</span> --&gt;
+&lt;keep-alive :include<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/a|b/&#34;</span>&gt;
+  &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+
+&lt;!-- 数组 <span style="color:#f92672">(</span>使用 <span style="color:#e6db74">`</span>v-bind<span style="color:#e6db74">`</span><span style="color:#f92672">)</span> --&gt;
+&lt;keep-alive :include<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;[&#39;a&#39;, &#39;b&#39;]&#34;</span>&gt;
+  &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+</code></pre></div><p>匹配首先检查组件自身的 <code>name </code>选项，如果 <code>name </code>选项不可用，则匹配它的局部注册名称 (父组件 <code>components </code>选项的键值)。匿名组件不能被匹配。</p>
+<blockquote>
+<p><em><strong>max</strong></em>  <em>2.5.0 新增</em></p>
+</blockquote>
+<p>最多可以缓存多少组件实例。一旦这个数字达到了，在新实例被创建之前，</p>
+<p>已缓存组件中最久没有被访问的实例会被销毁掉。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&lt;keep-alive :max<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;10&#34;</span>&gt;
+  &lt;component :is<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;view&#34;</span>&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+</code></pre></div><p><code>&lt;keep-alive&gt; </code> 不会在函数式组件中正常工作，因为它们没有缓存实例。</p>
+<h1 id="使用场景">使用场景</h1>
+<p>当你不希望让组件 每次都刷新的时候 那么你就该用这个方法了</p>
 <h1 id="解决方案">解决方案</h1>
-<h1 id="踩坑">踩坑</h1>
+<h3 id="基本使用">基本使用</h3>
+<p>在 <code>&lt;router-view&gt;&lt;/router-view&gt; </code>组件中</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&lt;div id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;app&#34;</span> class<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;wrapper&#39;</span>&gt;
+    &lt;keep-alive&gt;
+        &lt;!-- 需要缓存的视图组件 --&gt; 
+        &lt;router-view v-if<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$route<span style="color:#e6db74">.meta.keepAlive&#34;</span>&gt;&lt;/router-view&gt;
+     &lt;/keep-alive&gt;
+      &lt;!-- 不需要缓存的视图组件 --&gt;
+     &lt;router-view v-if<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;!</span>$route<span style="color:#e6db74">.meta.keepAlive&#34;</span>&gt;&lt;/router-view&gt;
+&lt;/div&gt;
+</code></pre></div><p>keepAlive 是定义在了 路由表中的 meta 中的 标识</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">{</span>
+  path: <span style="color:#e6db74">&#39;list&#39;</span>,
+  name: <span style="color:#e6db74">&#39;itemList&#39;</span>, // 商品管理
+  component <span style="color:#f92672">(</span>resolve<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    require<span style="color:#f92672">([</span><span style="color:#e6db74">&#39;@/pages/item/list&#39;</span><span style="color:#f92672">]</span>, resolve<span style="color:#f92672">)</span>
+ <span style="color:#f92672">}</span>,
+ meta: <span style="color:#f92672">{</span>
+  keepAlive: true,
+  title: <span style="color:#e6db74">&#39;商品管理&#39;</span>
+ <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h1 id="踩坑">踩坑</h1>
+<p>待完善&hellip;</p>
 <h1 id="原理简析">原理简析</h1>
+<p>源码位置： <strong>src/core/components/keep-alive.js</strong>
+先看 对外暴露的对象</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export default <span style="color:#f92672">{</span>
+  name: <span style="color:#e6db74">&#39;keep-alive&#39;</span>,
+  abstract: true, // 判断当前组件虚拟dom是否渲染成真实dom的关键
+  props: <span style="color:#f92672">{</span>
+      include: patternTypes, // 缓存白名单
+      exclude: patternTypes, // 缓存黑名单
+      max: <span style="color:#f92672">[</span>String, Number<span style="color:#f92672">]</span> // 缓存的组件
+  <span style="color:#f92672">}</span>,
+  created<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+     this.cache <span style="color:#f92672">=</span> Object.create<span style="color:#f92672">(</span>null<span style="color:#f92672">)</span> // 缓存虚拟dom
+     this.keys <span style="color:#f92672">=</span> <span style="color:#f92672">[]</span> // 缓存的虚拟dom的键集合
+  <span style="color:#f92672">}</span>,
+  destroyed<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>const key in this.cache<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+       // 删除所有的缓存
+       pruneCacheEntry<span style="color:#f92672">(</span>this.cache, key, this.keys<span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>,
+ mounted<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+   // 实时监听黑白名单的变动
+   this.$watch<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;include&#39;</span>, val <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+       pruneCache<span style="color:#f92672">(</span>this, name <span style="color:#f92672">=</span>&gt; matched<span style="color:#f92672">(</span>val, name<span style="color:#f92672">))</span>
+   <span style="color:#f92672">})</span>
+   this.$watch<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;exclude&#39;</span>, val <span style="color:#f92672">=</span>&gt; <span style="color:#f92672">{</span>
+       pruneCache<span style="color:#f92672">(</span>this, name <span style="color:#f92672">=</span>&gt; !matches<span style="color:#f92672">(</span>val, name<span style="color:#f92672">))</span>
+   <span style="color:#f92672">})</span>
+ <span style="color:#f92672">}</span>,
+
+ render<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    // 先省略...
+ <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>可以看出，与我们定义组件的过程一样，先是设置组件名为keep-alive，其次定义了一个abstract属性，值为true。这个属性在vue的官方教程并未提及，却至关重要，后面的渲染过程会用到。props属性定义了keep-alive组件支持的全部参数。</p>
+<p>keep-alive在它生命周期内定义了三个钩子函数：</p>
+<p>created</p>
+<p>初始化两个对象分别缓存VNode(虚拟DOM)和VNode对应的键集合</p>
+<p>destroyed</p>
+<p>删除this.cache中缓存的VNode实例。我们留意到，这不是简单地将this.cache置为null，而是遍历调用pruneCacheEntry函数删除。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">function</span> pruneCacheEntry <span style="color:#f92672">(</span>
+  cache: VNodeCache,
+  key: string,
+  keys: Array&lt;string&gt;,
+  current?: VNode
+<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+ const cached <span style="color:#f92672">=</span> cache<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>
+ <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cached <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">(</span>!current <span style="color:#f92672">||</span> cached.tag !<span style="color:#f92672">==</span> current.tag<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+    cached.componentInstance.$destroyed<span style="color:#f92672">()</span> // 执行组件的destroy钩子函数
+ <span style="color:#f92672">}</span>
+ cache<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> null
+ remove<span style="color:#f92672">(</span>keys, key<span style="color:#f92672">)</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>删除缓存的VNode还要对应组件实例的destory钩子函数</p>
+<p>mounted</p>
+<p>在mounted这个钩子中对include和exclude参数进行监听，然后实时地更新（删除）this.cache对象数据。</p>
+<p>pruneCache函数的核心也是去调用pruneCacheEntry</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">function</span> pruneCache <span style="color:#f92672">(</span>keepAliveInstance: any, filter: Function<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  const <span style="color:#f92672">{</span> cache, keys, _vnode <span style="color:#f92672">}</span> <span style="color:#f92672">=</span> keepAliveInstance
+  <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>const key in cache<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    const cachedNode: ?VNode <span style="color:#f92672">=</span> cache<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cachedNode<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      const name: ?string <span style="color:#f92672">=</span> getComponentName<span style="color:#f92672">(</span>cachedNode.componentOptions<span style="color:#f92672">)</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>name <span style="color:#f92672">&amp;&amp;</span> !filter<span style="color:#f92672">(</span>name<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+        pruneCacheEntry<span style="color:#f92672">(</span>cache, key, keys, _vnode<span style="color:#f92672">)</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>render</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">render <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  const slot <span style="color:#f92672">=</span> this.$slots.defalut
+  const vnode: VNode <span style="color:#f92672">=</span> getFirstComponentChild<span style="color:#f92672">(</span>slot<span style="color:#f92672">)</span> // 找到第一个子组件对象
+  const componentOptions : ?VNodeComponentOptions <span style="color:#f92672">=</span> vnode <span style="color:#f92672">&amp;&amp;</span> vnode.componentOptions
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>componentOptions<span style="color:#f92672">)</span> <span style="color:#f92672">{</span> // 存在组件参数
+    // check pattern
+    const name: ?string <span style="color:#f92672">=</span> getComponentName<span style="color:#f92672">(</span>componentOptions<span style="color:#f92672">)</span> // 组件名
+    const <span style="color:#f92672">{</span> include, exclude <span style="color:#f92672">}</span> <span style="color:#f92672">=</span> this
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>// 条件匹配
+      // not included
+      （include <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">(</span>!name <span style="color:#f92672">||</span> !matches<span style="color:#f92672">(</span>include, name<span style="color:#f92672">))</span>）<span style="color:#f92672">||</span>
+      // excluded
+        <span style="color:#f92672">(</span>exclude <span style="color:#f92672">&amp;&amp;</span> name <span style="color:#f92672">&amp;&amp;</span> matches<span style="color:#f92672">(</span>exclude, name<span style="color:#f92672">))</span>
+    <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> vnode
+    <span style="color:#f92672">}</span>
+    
+    const <span style="color:#f92672">{</span> cache, keys <span style="color:#f92672">}</span> <span style="color:#f92672">=</span> this
+    // 定义组件的缓存key
+    const key: ?string <span style="color:#f92672">=</span> vnode.key <span style="color:#f92672">===</span> null ? componentOptions.Ctor.cid + <span style="color:#f92672">(</span>componentOptions.tag ? <span style="color:#e6db74">`</span>::<span style="color:#e6db74">${</span>componentOptions.tag<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span> : <span style="color:#e6db74">&#39;&#39;</span><span style="color:#f92672">)</span> : vnode.key
+     <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>cache<span style="color:#f92672">[</span>key<span style="color:#f92672">])</span> <span style="color:#f92672">{</span> // 已经缓存过该组件
+        vnode.componentInstance <span style="color:#f92672">=</span> cache<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>.componentInstance
+        remove<span style="color:#f92672">(</span>keys, key<span style="color:#f92672">)</span>
+        keys.push<span style="color:#f92672">(</span>key<span style="color:#f92672">)</span> // 调整key排序
+     <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        cache<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> vnode //缓存组件对象
+        keys.push<span style="color:#f92672">(</span>key<span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>this.max <span style="color:#f92672">&amp;&amp;</span> keys.length &gt; parseInt<span style="color:#f92672">(</span>this.max<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+          //超过缓存数限制，将第一个删除
+          pruneCacheEntry<span style="color:#f92672">(</span>cahce, keys<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span>, keys, this._vnode<span style="color:#f92672">)</span>
+        <span style="color:#f92672">}</span>
+     <span style="color:#f92672">}</span>
+     
+      vnode.data.keepAlive <span style="color:#f92672">=</span> true //渲染和执行被包裹组件的钩子函数需要用到
+ 
+ <span style="color:#f92672">}</span>
+ <span style="color:#66d9ef">return</span> vnode <span style="color:#f92672">||</span> <span style="color:#f92672">(</span>slot <span style="color:#f92672">&amp;&amp;</span> slot<span style="color:#f92672">[</span>0<span style="color:#f92672">])</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><blockquote>
+<p>第一步：获取keep-alive包裹着的第一个子组件对象及其组件名；</p>
+</blockquote>
+<blockquote>
+<p>第二步：根据设定的黑白名单（如果有）进行条件匹配，决定是否缓存。不匹配，直接返回组件实例（VNode），否则执行第三步；</p>
+</blockquote>
+<blockquote>
+<p>第三步：根据组件ID和tag生成缓存Key，并在缓存对象中查找是否已缓存过该组件实例。如果存在，直接取出缓存值并更新该key在this.keys中的位置（更新key的位置是实现LRU置换策略的关键），否则执行第四步；</p>
+</blockquote>
+<blockquote>
+<p>第四步：在this.cache对象中存储该组件实例并保存key值，之后检查缓存的实例数量是否超过max设置值，超过则根据LRU置换策略删除最近最久未使用的实例（即是下标为0的那个key）;</p>
+</blockquote>
+<blockquote>
+<p>第五步：最后并且很重要，将该组件实例的keepAlive属性值设置为true。</p>
+</blockquote>
+<h2 id="渲染">渲染</h2>
+<p>。。。。</p>
 <p><em>写的不对，还请<strong>批评</strong>。</em></p>
 
     </div>
@@ -268,6 +472,10 @@
 
     <div class="post-nav">
         
+        <a href="http://www.noahzhou.com/2021/2021-02-02-vue-nexttick/" class="prev" rel="prev" title="Vue- nextTick 原理分析 （未完待续）"><i class="iconfont icon-left"></i>&nbsp;Vue- nextTick 原理分析 （未完待续）</a>
+        
+        
+        <a href="http://www.noahzhou.com/2021/2021-02-02-vue-diff/" class="next" rel="next" title="Vue- diff 原理分析 （未完待续）">Vue- diff 原理分析 （未完待续）&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
