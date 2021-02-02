@@ -9,9 +9,9 @@
     <meta name="description" content="夏日里的一把阳光，周光个人博客，Blog @ 周光 464032204@qq.com">
     <meta name="keywords" content="周光，博客，lucas.zhou，blog，前端，全栈，后端">
     
-    <link rel="prev" href="http://www.noahzhou.com/2019/2019-10-30-git-bisect/" />
-    <link rel="next" href="http://www.noahzhou.com/2020/2020-10-26-go-service-upgrade/" />
-    <link rel="canonical" href="http://www.noahzhou.com/2020/2020-05-08-asrock-hackintosh/" />
+    
+    
+    <link rel="canonical" href="http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
     <title>
         
         
-            Hackintosh (黑苹果)折腾 | lucas.zhou `Blog
+            揭开(keep-alive)神秘面纱- Vue 源码解析 | lucas.zhou `Blog
         
     </title>
-    <meta name="title" content="Hackintosh (黑苹果)折腾 | lucas.zhou `Blog">
+    <meta name="title" content="揭开(keep-alive)神秘面纱- Vue 源码解析 | lucas.zhou `Blog">
     
 <link rel="stylesheet" href="/css/main.min.css">
 
@@ -43,21 +43,21 @@
          "@id": "http:\/\/www.noahzhou.com\/"
     },
     "articleSection" : "posts",
-    "name" : "Hackintosh (黑苹果)折腾",
-    "headline" : "Hackintosh (黑苹果)折腾",
-    "description" : "ASRock-Z370-Pro4-9900K-Hackintosh 系统版本 MacOS Catalina EFI 文件 GitHub 链接 EFI 引导文件可以去 git clone https:\/\/github.com\/wujunze\/ASRock-Z370-Pro4-9900K-Hackintosh 详细配置 硬件 品牌型号 处理器 英特尔 Core i9-9900K 3.6GHz 八核心十六线程 主板 华擎 Z370 Pro4 内存 芝奇 DDR4 3200MHz 8GB x 2 硬盘 三星 970",
+    "name" : "揭开(keep-alive)神秘面纱- Vue 源码解析",
+    "headline" : "揭开(keep-alive)神秘面纱- Vue 源码解析",
+    "description" : "定义 使用场景 使用方法 解决方案 踩坑 原理简析 写的不对，还请批评。",
     "inLanguage" : "zh-cn",
     "author" : "lucas.zhou",
     "creator" : "lucas.zhou",
     "publisher": "lucas.zhou",
     "accountablePerson" : "lucas.zhou",
     "copyrightHolder" : "lucas.zhou",
-    "copyrightYear" : "2020",
-    "datePublished": "2020-05-08 00:00:00 \u002b0000 UTC",
-    "dateModified" : "2020-05-08 00:00:00 \u002b0000 UTC",
-    "url" : "http:\/\/www.noahzhou.com\/2020\/2020-05-08-asrock-hackintosh\/",
-    "wordCount" : "460",
-    "keywords" : [ "MacOS","Apple","Hackintosh","ASRock-Z370-Pro4","Hardware","9900K", "lucas.zhou `Blog"]
+    "copyrightYear" : "2021",
+    "datePublished": "2021-02-02 00:00:00 \u002b0000 UTC",
+    "dateModified" : "2021-02-02 00:00:00 \u002b0000 UTC",
+    "url" : "http:\/\/www.noahzhou.com\/2021\/2021-02-02-vue-keep-alive\/",
+    "wordCount" : "30",
+    "keywords" : [ "Vue源码解析", "lucas.zhou `Blog"]
 }
 </script>
 
@@ -174,11 +174,11 @@
                     
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">Hackintosh (黑苹果)折腾</h1>
+        <h1 class="post-title" itemprop="name headline">揭开(keep-alive)神秘面纱- Vue 源码解析</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="http://www.noahzhou.com/" rel="author">lucas.zhou</a> with ♥
                 <span class="post-time">
-                on <time datetime=2020-05-08 itemprop="datePublished">May 8, 2020</time>
+                on <time datetime=2021-02-02 itemprop="datePublished">February 2, 2021</time>
                 </span>
                 in
                 
@@ -187,26 +187,16 @@
                         
                         
                         
-                          <a href="http://www.noahzhou.com/categories/apple/"> Apple, </a>
+                          <a href="http://www.noahzhou.com/categories/vue/"> vue, </a>
                         
                         
                         
                         
-                          <a href="http://www.noahzhou.com/categories/mac/"> Mac, </a>
-                        
-                        
-                        
-                        
-                          <a href="http://www.noahzhou.com/categories/macos/"> macOS, </a>
-                        
-                        
-                        
-                        
-                          <a href="http://www.noahzhou.com/categories/hardware/"> Hardware, </a>
+                          <a href="http://www.noahzhou.com/categories/js/"> js, </a>
                         
                         
                 </span>
-                <span class="post-word-count">460 words</span>
+                <span class="post-word-count">30 words</span>
         </div>
     </header>
 
@@ -215,11 +205,9 @@
 
         
         
-            
-        
 
         
-          <img src="https://wujunze.com/blog-images/r/pic/20200510211809.png" class="featured_image">
+          <img src="https://wujunze.com/blog-images/r/pic/20201027144234.png" class="featured_image">
         
         
         
@@ -230,110 +218,13 @@
         
         
 
-        <h2 id="asrock-z370-pro4-9900k-hackintosh">ASRock-Z370-Pro4-9900K-Hackintosh</h2>
-<h2 id="系统版本">系统版本</h2>
-<p><strong>MacOS Catalina</strong></p>
-<h2 id="efi-文件-github-链接">EFI 文件 GitHub 链接</h2>
-<p>EFI 引导文件可以去 <code>git clone https://github.com/wujunze/ASRock-Z370-Pro4-9900K-Hackintosh</code></p>
-<h2 id="详细配置">详细配置</h2>
-<table>
-<thead>
-<tr>
-<th>硬件</th>
-<th>品牌型号</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>处理器</td>
-<td>英特尔 Core i9-9900K 3.6GHz 八核心十六线程</td>
-</tr>
-<tr>
-<td>主板</td>
-<td>华擎 Z370 Pro4</td>
-</tr>
-<tr>
-<td>内存</td>
-<td>芝奇 DDR4 3200MHz 8GB x 2</td>
-</tr>
-<tr>
-<td>硬盘</td>
-<td>三星 970 Pro MLC 1T</td>
-</tr>
-<tr>
-<td>显卡</td>
-<td>蓝宝石 白金 满血版 RX560 4G</td>
-</tr>
-<tr>
-<td>显示器</td>
-<td>LG 27UL850 27英寸 4K Type-C IPS</td>
-</tr>
-<tr>
-<td>蓝牙和无线网卡</td>
-<td>博通 BCM943602CS</td>
-</tr>
-</tbody>
-</table>
-<h2 id="部分截图">部分截图</h2>
-<p><img src="https://wujunze.com/blog-images/r/pic/20200508193513.png" alt="boot menu" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200508193103.png" alt="loading" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200508193138.png" alt="install one" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200510205422.png" alt="选择语言" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200508193214.png" alt="install end" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200508193259.png" alt="htop one" loading="lazy" ></p>
-<h1 id="安装系统">安装系统</h1>
-<h2 id="1制作苹果系统-安装u盘">1.制作苹果系统 安装U盘</h2>
-<p>1.1 U盘 16G  格式化为 GUID    Mac日志格式</p>
-<p>1.2 执行命令 制作启动U盘<br>
-<code>sudo /Users/wujunze/Desktop/Install\ macOS\ Catalina.app/Contents/Resources/createinstallmedia --volume /Volumes/MacInstall</code></p>
-<p>1.3 U 盘制作 OK 
-<img src="https://wujunze.com/blog-images/r/pic/20200510201150.png" alt="U 盘制作 OK" loading="lazy" ></p>
-<h2 id="2-copy-引导文件-给-u盘用">2. copy 引导文件 给 U盘用</h2>
-<p>2.1 挂载 EFI 分区
-<code>diskutil list</code>
-<code>sudo diskutil mount disk4s1</code>
-<img src="https://wujunze.com/blog-images/r/pic/20200510201719.png" alt="diskutil list" loading="lazy" ></p>
-<p>2.2 把你主板对应的 EFI 文件 copy 到 EFI 分区
-<img src="https://wujunze.com/blog-images/r/pic/20200510201845.png" alt="EFI" loading="lazy" ></p>
-<p>2.3 此时的 U 盘 应该是这样的 
-<img src="https://wujunze.com/blog-images/r/pic/20200510201910.png" alt=""></p>
-<h1 id="通过-efi-引导-macos-u盘镜像安装系统">通过 EFI 引导 MacOS U盘镜像安装系统</h1>
-<p>选择 U盘里面的 UEFI 启动项<br>
-<img src="https://wujunze.com/blog-images/r/pic/20200510202456.png" alt="UEFI 启动项" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200510202748.png" alt="U盘引导 MacOS 安装" loading="lazy" ></p>
-<h2 id="进入安装引导界面----按回车键">进入安装引导界面    按回车键</h2>
-<p><img src="https://wujunze.com/blog-images/r/pic/20200510203052.png" alt="安装界面" loading="lazy" ></p>
-<h2 id="clover-引导">Clover 引导</h2>
-<p><img src="https://wujunze.com/blog-images/r/pic/20200510203227.png" alt="loading" loading="lazy" >
-进入安装界面 
-<img src="https://wujunze.com/blog-images/r/pic/20200510203716.png" alt="Mac 安装工具" loading="lazy" ></p>
-<p>格式化磁盘
-<img src="https://wujunze.com/blog-images/r/pic/20200510203858.png" alt="显示磁盘" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200510204053.png" alt="抹掉磁盘" loading="lazy" >
-<img src="https://wujunze.com/blog-images/r/pic/20200510204828.png" alt="系统盘格式化成功" loading="lazy" >
-安装系统
-<img src="https://wujunze.com/blog-images/r/pic/20200510205013.png" alt="安装系统" loading="lazy" ></p>
-<p>安装 
-<img src="https://wujunze.com/blog-images/r/pic/20200510205341.png" alt="安装系统" loading="lazy" ></p>
-<p>安装完成
-<img src="https://wujunze.com/blog-images/r/pic/20200510205422.png" alt="选择语言" loading="lazy" ></p>
-<p>进入系统 
-<img src="https://wujunze.com/blog-images/r/pic/20200510210019.png" alt="进入系统" loading="lazy" ></p>
-<p>系统概览
-<img src="https://wujunze.com/blog-images/r/pic/20200510210149.png" alt="系统概览" loading="lazy" ></p>
-<p>存储空间
-<img src="https://wujunze.com/blog-images/r/pic/20200510210616.png" alt="disk info" loading="lazy" ></p>
-<h2 id="通过-硬盘-efi-引导系统">通过 硬盘 EFI 引导系统</h2>
-<p>重复第一步的 挂载 EFI 分区步骤<br>
-然后<strong>把U盘里面的 EFI 引导文件 copy 到硬盘的 EFI 分区</strong>即可</p>
-<p>去 APP store 下载一个 Xcode 
-<img src="https://wujunze.com/blog-images/r/pic/20200510211158.png" alt="APP store" loading="lazy" ></p>
-<h2 id="恭喜你的-hackintosh-已经安装完成了">恭喜你的 <strong>Hackintosh</strong> 已经安装完成了</h2>
-<p><strong>折腾黑苹果是一个很有趣的过程 可以深入了解系统启动 系统引导 赶快动手折腾起来吧</strong></p>
-<p><strong>欢迎评论区留言交流 或者加入 Hackintosh 交流小组  加微信1017109588 暗号Hackintosh</strong></p>
-<blockquote>
-<p>笔者才疏学浅,仓促成文,如有不当之处,还请大家斧正.</p>
-</blockquote>
+        <h1 id="定义">定义</h1>
+<h1 id="使用场景">使用场景</h1>
+<h1 id="使用方法">使用方法</h1>
+<h1 id="解决方案">解决方案</h1>
+<h1 id="踩坑">踩坑</h1>
+<h1 id="原理简析">原理简析</h1>
+<p><em>写的不对，还请<strong>批评</strong>。</em></p>
 
     </div>
 
@@ -348,7 +239,7 @@
             
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=http://www.noahzhou.com/2020/2020-05-08-asrock-hackintosh/>http://www.noahzhou.com/2020/2020-05-08-asrock-hackintosh/</span>
+                    <a href=http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/>http://www.noahzhou.com/2021/2021-02-02-vue-keep-alive/</span>
             </p>
             
             
@@ -364,23 +255,8 @@
             <section>
             <i class="iconfont icon-tag"></i>Tag(s):
             
-            <span class="tag"><a href="http://www.noahzhou.com/tags/macos/">
-                    #MacOS</a></span>
-            
-            <span class="tag"><a href="http://www.noahzhou.com/tags/apple/">
-                    #Apple</a></span>
-            
-            <span class="tag"><a href="http://www.noahzhou.com/tags/hackintosh/">
-                    #Hackintosh</a></span>
-            
-            <span class="tag"><a href="http://www.noahzhou.com/tags/asrock-z370-pro4/">
-                    #ASRock-Z370-Pro4</a></span>
-            
-            <span class="tag"><a href="http://www.noahzhou.com/tags/hardware/">
-                    #Hardware</a></span>
-            
-            <span class="tag"><a href="http://www.noahzhou.com/tags/9900k/">
-                    #9900K</a></span>
+            <span class="tag"><a href="http://www.noahzhou.com/tags/vue%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
+                    #Vue源码解析</a></span>
             
             </section>
         
@@ -392,10 +268,6 @@
 
     <div class="post-nav">
         
-        <a href="http://www.noahzhou.com/2019/2019-10-30-git-bisect/" class="prev" rel="prev" title="使用 git bisect 定位你的 BUG"><i class="iconfont icon-left"></i>&nbsp;使用 git bisect 定位你的 BUG</a>
-        
-        
-        <a href="http://www.noahzhou.com/2020/2020-10-26-go-service-upgrade/" class="next" rel="next" title="让你的 Go 服务优雅的重启 (解决代码发布 Go 服务闪断的问题)">让你的 Go 服务优雅的重启 (解决代码发布 Go 服务闪断的问题)&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 

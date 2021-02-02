@@ -5,7 +5,7 @@
     <description>Recent content in lucas.zhou `Blog on lucas.zhou `Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 12 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Feb 2021 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://www.noahzhou.com/" rel="self" type="application/rss+xml" />
     
     <item>
@@ -136,7 +136,7 @@
     <item>
       <title>Posts</title>
       <link>http://www.noahzhou.com/posts/</link>
-      <pubDate>Tue, 12 May 2020 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>http://www.noahzhou.com/posts/</guid>
       <description></description>
@@ -345,12 +345,12 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://www.noahzhou.com/projects/</guid>
-      <description>&lt;h1 id=&#34;projects&#34;&gt;Projects&lt;/h1&gt;
-&lt;h2 id=&#34;dingtalk-exceptionhttpsgithubcomwujunzedingtalk-exception-----------laravellumen-exception-notify-through-dingtalk-br&#34;&gt;&lt;a href=&#34;https://github.com/wujunze/dingtalk-exception&#34;&gt;dingtalk-exception&lt;/a&gt;:           &lt;strong&gt;Laravel/Lumen exception notify through DingTalk&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
-&lt;h2 id=&#34;nginx-http-echo-modulehttpsgithubcomwujunzenginx-http-echo-module---a-simple-nginx-http-module--just-for-fun-br&#34;&gt;&lt;a href=&#34;https://github.com/wujunze/nginx-http-echo-module&#34;&gt;nginx-http-echo-module&lt;/a&gt;:   &lt;strong&gt;A simple Nginx http module,  Just for fun&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
-&lt;h2 id=&#34;redis-module-pandahttpsgithubcomwujunzeredis-module-panda-----------a-simple-redis-module--just-for-fun-br&#34;&gt;&lt;a href=&#34;https://github.com/wujunze/redis-module-panda&#34;&gt;redis-module-panda&lt;/a&gt;:           &lt;strong&gt;A simple redis module,  Just for fun&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
-&lt;h2 id=&#34;composer-phpcs-pluginhttpsgithubcomwujunzecomposer-phpcs-plugin-----------composer-plugin-for-code-style-checking-before-commit-using-php-cs-fixer-br&#34;&gt;&lt;a href=&#34;https://github.com/wujunze/composer-phpcs-plugin&#34;&gt;composer-phpcs-plugin&lt;/a&gt;:           &lt;strong&gt;Composer plugin for code style checking before commit using php-cs-fixer&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
-&lt;h2 id=&#34;seas-loggerhttpsgithubcomseasxseas-logger-----------an-effectivefaststable-log-package-for-php-base-seaslog-br&#34;&gt;&lt;a href=&#34;https://github.com/SeasX/seas-logger&#34;&gt;seas-logger&lt;/a&gt;:           &lt;strong&gt;An effective,fast,stable log package for PHP base SeasLog&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
+      <description>&lt;h1 id=&#34;my-projects&#34;&gt;My Projects&lt;/h1&gt;
+&lt;h2 id=&#34;js-canvashttpsgithubcomzg199519js-canvas-----------webpack--canvas-模仿微信截图-br&#34;&gt;&lt;a href=&#34;https://github.com/zg199519/js-canvas&#34;&gt;js-canvas&lt;/a&gt;:           &lt;strong&gt;webpack + canvas 模仿微信截图&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;js-sharehttpsgithubcomzg199519js-share-----------js原生分享插件-br&#34;&gt;&lt;a href=&#34;https://github.com/zg199519/js-share&#34;&gt;js-share&lt;/a&gt;:           &lt;strong&gt;JS原生分享插件&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;nuxt_bloghttpsgithubcomzg199519nuxt_blog-----------sr模仿掘金-简约-黑白主题博客-br&#34;&gt;&lt;a href=&#34;https://github.com/zg199519/nuxt_blog&#34;&gt;nuxt_blog&lt;/a&gt;:           &lt;strong&gt;sr模仿掘金 简约 黑白主题博客&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;nuxt_blog_apihttpsgithubcomzg199519nuxt_blog_api-----------nuxt-blog_api-接口--数据库-brbr&#34;&gt;&lt;a href=&#34;https://github.com/zg199519/nuxt_blog_api&#34;&gt;nuxt_blog_api&lt;/a&gt;:           &lt;strong&gt;nuxt blog_api 接口 + 数据库&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;hugo_bloghttpsgithubcomzg199519hugo_blog-----------基于hugo-的-blog-静态-br&#34;&gt;&lt;a href=&#34;https://github.com/zg199519/hugo_blog&#34;&gt;hugo_blog&lt;/a&gt;:           &lt;strong&gt;基于hugo 的 blog 静态&lt;/strong&gt; &lt;!-- raw HTML omitted --&gt;&lt;/h2&gt;
 </description>
     </item>
     
