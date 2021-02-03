@@ -9,9 +9,9 @@
     <meta name="description" content="夏日里的一把阳光，周光个人博客，Blog @ 周光 464032204@qq.com">
     <meta name="keywords" content="周光，博客，lucas.zhou，blog，前端，全栈，后端">
     
-    
-    <link rel="next" href="http://www.noahzhou.com/2021/2021-02-03-wx-dev-share/" />
-    <link rel="canonical" href="http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/" />
+    <link rel="prev" href="http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/" />
+    <link rel="next" href="http://www.noahzhou.com/2021/2021-02-02-vue-zhixingshunxu/" />
+    <link rel="canonical" href="http://www.noahzhou.com/2021/2021-02-03-wx-dev-share/" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -22,10 +22,10 @@
     <title>
         
         
-            You Don`t Know js - 待定 （未完待续） | lucas.zhou `Blog
+            WeChat shares the development process - 待定 （未完待续） | lucas.zhou `Blog
         
     </title>
-    <meta name="title" content="You Don`t Know js - 待定 （未完待续） | lucas.zhou `Blog">
+    <meta name="title" content="WeChat shares the development process - 待定 （未完待续） | lucas.zhou `Blog">
     
 <link rel="stylesheet" href="/css/main.min.css">
 
@@ -43,9 +43,9 @@
          "@id": "http:\/\/www.noahzhou.com\/"
     },
     "articleSection" : "posts",
-    "name" : "You Don`t Know js - 待定 （未完待续）",
-    "headline" : "You Don`t Know js - 待定 （未完待续）",
-    "description" : "\u0026hellip;.. 写的不对，还请批评。",
+    "name" : "WeChat shares the development process - 待定 （未完待续）",
+    "headline" : "WeChat shares the development process - 待定 （未完待续）",
+    "description" : "\u0026hellip;.. 准备 微信开发文档 微信开发者工具 在这里下载 认证的微信公众号 公众号必须是认证的公众号，如果是开发的话也可以申请个人开发账户用作测试！ JS接口安",
     "inLanguage" : "zh-cn",
     "author" : "lucas.zhou",
     "creator" : "lucas.zhou",
@@ -55,9 +55,9 @@
     "copyrightYear" : "2021",
     "datePublished": "2021-02-02 00:00:00 \u002b0000 UTC",
     "dateModified" : "2021-02-02 00:00:00 \u002b0000 UTC",
-    "url" : "http:\/\/www.noahzhou.com\/2021\/2021-02-04-you-dont-know-js\/",
-    "wordCount" : "11",
-    "keywords" : [ "你不知道的js", "lucas.zhou `Blog"]
+    "url" : "http:\/\/www.noahzhou.com\/2021\/2021-02-03-wx-dev-share\/",
+    "wordCount" : "1153",
+    "keywords" : [ "WeChat-development", "lucas.zhou `Blog"]
 }
 </script>
 
@@ -174,7 +174,7 @@
                     
 <article class="post-warp" itemscope itemtype="http://schema.org/Article">
     <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">You Don`t Know js - 待定 （未完待续）</h1>
+        <h1 class="post-title" itemprop="name headline">WeChat shares the development process - 待定 （未完待续）</h1>
         <div class="post-meta">
                 Written by <a itemprop="name" href="http://www.noahzhou.com/" rel="author">lucas.zhou</a> with ♥
                 <span class="post-time">
@@ -187,16 +187,11 @@
                         
                         
                         
-                          <a href="http://www.noahzhou.com/categories/js/"> js, </a>
-                        
-                        
-                        
-                        
-                          <a href="http://www.noahzhou.com/categories/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/"> 你不知道的js, </a>
+                          <a href="http://www.noahzhou.com/categories/wechat/"> WeChat, </a>
                         
                         
                 </span>
-                <span class="post-word-count">11 words</span>
+                <span class="post-word-count">1153 words</span>
         </div>
     </header>
 
@@ -217,7 +212,96 @@
         
 
         <p>&hellip;..</p>
-<p><em>写的不对，还请<strong>批评</strong>。</em></p>
+<h1 id="准备">准备</h1>
+<p><a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html">微信开发文档</a></p>
+<ul>
+<li>微信开发者工具<br>
+<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html">在这里下载</a></li>
+<li>认证的微信公众号<br>
+公众号必须是认证的公众号，如果是开发的话也可以申请个人开发账户用作测试！</li>
+<li>JS接口安全域名<br>
+先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。<br>
+备注：登录后可在“开发者中心”查看对应的接口权限。</li>
+</ul>
+<h1 id="步骤">步骤</h1>
+<ul>
+<li>绑定域名<br>
+先登录微信公众平台进入“公众号设置”的“功能设置”里填写“JS接口安全域名”。<br>
+备注：登录后可在“开发者中心”查看对应的接口权限。</li>
+<li>引入JS文件<br>
+在需要调用JS接口的页面引入如下JS文件，（支持https）：http://res.wx.qq.com/open/js/jweixin-1.6.0.js<br>
+如需进一步提升服务稳定性，当上述资源不可访问时，可改访问：http://res2.wx.qq.com/open/js/jweixin-1.6.0.js （支持https）。<br>
+备注：支持使用 AMD/CMD 标准模块加载方法加载</li>
+<li>通过config接口注入权限验证配置<br>
+所有需要使用JS-SDK的页面必须先注入配置信息，否则将无法调用（同一个url仅需调用一次，<br>
+对于变化url的SPA的web app可在每次url变化时进行调用,目前Android微信客户端不支持pushState的H5新特性，<br>
+所以使用pushState来实现web app的页面会导致签名失败，此问题会在Android6.2中修复）。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    wx.config<span style="color:#f92672">({</span>
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: <span style="color:#e6db74">&#39;&#39;</span>, // 必填，公众号的唯一标识
+        timestamp: , // 必填，生成签名的时间戳
+        nonceStr: <span style="color:#e6db74">&#39;&#39;</span>, // 必填，生成签名的随机串
+        signature: <span style="color:#e6db74">&#39;&#39;</span>,// 必填，签名
+        jsApiList: <span style="color:#f92672">[]</span> // 必填，需要使用的JS接口列表
+    <span style="color:#f92672">})</span>;
+</code></pre></div></li>
+<li>通过ready接口处理成功验证
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    wx.ready<span style="color:#f92672">(</span><span style="color:#66d9ef">function</span><span style="color:#f92672">(){</span>
+        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+    <span style="color:#f92672">})</span>;
+</code></pre></div></li>
+<li>通过error接口处理失败验证
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    wx.error<span style="color:#f92672">(</span><span style="color:#66d9ef">function</span><span style="color:#f92672">(</span>res<span style="color:#f92672">){</span>
+        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+    <span style="color:#f92672">})</span>;
+</code></pre></div></li>
+</ul>
+<h1 id="实现">实现</h1>
+<ul>
+<li>引入js sdk<br>
+原生的 直接在页面 引入即可 如果是 使用框架 可以 使用 第三方插件集成进来 例如 vue <code>import wx from 'weixin-js-sdk'</code></li>
+<li>调用接口获取所需要的参数</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    <span style="color:#66d9ef">function</span> share <span style="color:#f92672">(</span>wxConfig, shareData<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        wx.config<span style="color:#f92672">({</span>
+            debug: false,
+            appId: <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>wxConfig.appId<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+            timestamp: <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>wxConfig.timestamp<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+            nonceStr: <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>wxConfig.nonceStr<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+            signature: <span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>wxConfig.signature<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>,
+            jsApiList: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#39;onMenuShareTimeline&#39;</span>,
+                <span style="color:#e6db74">&#39;onMenuShareAppMessage&#39;</span>,
+                <span style="color:#e6db74">&#39;onMenuShareQQ&#39;</span>,
+                <span style="color:#e6db74">&#39;onMenuShareWeibo&#39;</span>,
+                <span style="color:#e6db74">&#39;chooseImage&#39;</span>, <span style="color:#e6db74">&#39;uploadImage&#39;</span>, <span style="color:#e6db74">&#39;previewImage&#39;</span>,
+                <span style="color:#e6db74">&#39;getLocation&#39;</span>
+            <span style="color:#f92672">]</span>
+        <span style="color:#f92672">})</span>;
+        wx.ready<span style="color:#f92672">(</span><span style="color:#66d9ef">function</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+            //分享到朋友圈
+            wx.onMenuShareTimeline<span style="color:#f92672">({</span>
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.icon,
+                success: <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>,
+                cancel: <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>
+            <span style="color:#f92672">})</span>;
+            //分享给朋友
+            wx.onMenuShareAppMessage<span style="color:#f92672">({</span>
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.icon,
+                type: <span style="color:#e6db74">&#39;&#39;</span>,
+                dataUrl: <span style="color:#e6db74">&#34;&#34;</span>,
+                success: <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>,
+                cancel: <span style="color:#66d9ef">function</span> <span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>
+            <span style="color:#f92672">})</span>;
+        <span style="color:#f92672">})</span>
+    <span style="color:#f92672">}</span>
+</code></pre></div><p><em>写的不对，还请<strong>批评</strong>。</em></p>
 
     </div>
 
@@ -232,7 +316,7 @@
             
             <p class="copyright-item">
                     <span>Link:</span>
-                    <a href=http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/>http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/</span>
+                    <a href=http://www.noahzhou.com/2021/2021-02-03-wx-dev-share/>http://www.noahzhou.com/2021/2021-02-03-wx-dev-share/</span>
             </p>
             
             
@@ -248,8 +332,8 @@
             <section>
             <i class="iconfont icon-tag"></i>Tag(s):
             
-            <span class="tag"><a href="http://www.noahzhou.com/tags/%E4%BD%A0%E4%B8%8D%E7%9F%A5%E9%81%93%E7%9A%84js/">
-                    #你不知道的js</a></span>
+            <span class="tag"><a href="http://www.noahzhou.com/tags/wechat-development/">
+                    #WeChat-development</a></span>
             
             </section>
         
@@ -261,8 +345,10 @@
 
     <div class="post-nav">
         
+        <a href="http://www.noahzhou.com/2021/2021-02-04-you-dont-know-js/" class="prev" rel="prev" title="You Don`t Know js - 待定 （未完待续）"><i class="iconfont icon-left"></i>&nbsp;You Don`t Know js - 待定 （未完待续）</a>
         
-        <a href="http://www.noahzhou.com/2021/2021-02-03-wx-dev-share/" class="next" rel="next" title="WeChat shares the development process - 待定 （未完待续）">WeChat shares the development process - 待定 （未完待续）&nbsp;<i class="iconfont icon-right"></i></a>
+        
+        <a href="http://www.noahzhou.com/2021/2021-02-02-vue-zhixingshunxu/" class="next" rel="next" title="Vue- 执行顺序 原理分析 （未完待续）">Vue- 执行顺序 原理分析 （未完待续）&nbsp;<i class="iconfont icon-right"></i></a>
         
     </div>
 
