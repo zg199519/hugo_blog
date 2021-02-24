@@ -49,7 +49,7 @@
       <pubDate>Tue, 02 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>http://www.noahzhou.com/2021/2021-02-02-vue-data-binding/</guid>
-      <description>&amp;hellip;.. 写的不对，还请批评。</description>
+      <description>变化侦测篇 综述 前言 众所周知，Vue最大的特点之一就是数据驱动视图！ ui = render(state) ui,state 都是用户的 可操作的，唯一不变的是render Vue 就扮演了 render 这个角色 当</description>
     </item>
     
     <item>

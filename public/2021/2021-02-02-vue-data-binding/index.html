@@ -45,7 +45,7 @@
     "articleSection" : "posts",
     "name" : "Vue- 双向数据绑定 原理分析 （未完待续）",
     "headline" : "Vue- 双向数据绑定 原理分析 （未完待续）",
-    "description" : "\u0026hellip;.. 写的不对，还请批评。",
+    "description" : "变化侦测篇 综述 前言 众所周知，Vue最大的特点之一就是数据驱动视图！ ui = render(state) ui,state 都是用户的 可操作的，唯一不变的是render Vue 就扮演了 render 这个角色 当",
     "inLanguage" : "zh-cn",
     "author" : "lucas.zhou",
     "creator" : "lucas.zhou",
@@ -56,7 +56,7 @@
     "datePublished": "2021-02-02 00:00:00 \u002b0000 UTC",
     "dateModified" : "2021-02-02 00:00:00 \u002b0000 UTC",
     "url" : "http:\/\/www.noahzhou.com\/2021\/2021-02-02-vue-data-binding\/",
-    "wordCount" : "11",
+    "wordCount" : "2771",
     "keywords" : [ "Vue源码解析", "lucas.zhou `Blog"]
 }
 </script>
@@ -196,7 +196,7 @@
                         
                         
                 </span>
-                <span class="post-word-count">11 words</span>
+                <span class="post-word-count">2771 words</span>
         </div>
     </header>
 
@@ -205,18 +205,263 @@
 
         
         
-
-        
-        
-        
-        
+            
         
 
         
         
         
+        
+        
 
-        <p>&hellip;..</p>
+        
+        
+        
+
+        <h1 id="变化侦测篇">变化侦测篇</h1>
+<h2 id="综述">综述</h2>
+<h3 id="前言">前言</h3>
+<p>众所周知，Vue最大的特点之一就是数据驱动视图！
+<code>ui = render(state)</code></p>
+<p>ui,state 都是用户的 可操作的，唯一不变的是render Vue 就扮演了
+render 这个角色 当 Vue 发现 state 变化之后 经过一系列 处理 最终将变化
+反应到ui上</p>
+<p>vue 怎么知道 state 变化了呢？</p>
+<h3 id="什么是变化侦测">什么是变化侦测</h3>
+<p>变化侦测就是追踪状态，或者说是追踪数据的变化，一旦发生了变化，就要去更新视图。
+Angular 中是通过脏值检查流程来实现变化侦测的。
+React 中是通过对比虚拟DOM 来实现变化侦测的。
+Vue 中也有自己一套变化侦测机制。</p>
+<h3 id="总结">总结</h3>
+<p>数据驱动视图： 数据的变化引起视图变化 通过侦测数据变化来驱动 视图的变化。</p>
+<h2 id="object-变化的侦测">Object 变化的侦测</h2>
+<h3 id="前言-1">前言</h3>
+<p>js 为我们提供了 <code>Object.defineProperty</code> 通过该方法 我们就可以轻松的知道数据在什么时候发生变化了。</p>
+<h3 id="使object-数据变得可观测">使Object 数据变得可观测</h3>
+<p>数据什么时候读了 取了 我们称之为 set  get 操作 的时候 我们可以知道 ， 或者说是 会通知我们， 就称为 数据 是可 观测的！
+借助于<code>Object.defineProperty</code> 这个方法我们就可以使得数据变为可观测。</p>
+<p>下面举例子</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">let obj <span style="color:#f92672">=</span> <span style="color:#f92672">{}</span>
+let value <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+Object.defineProperty<span style="color:#f92672">(</span>obj, <span style="color:#e6db74">&#39;hello&#39;</span> , <span style="color:#f92672">{</span>
+    enumerable: true,
+    configurable: true,
+    get <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        console.log<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;属性被获取了&#39;</span><span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">return</span> value
+    <span style="color:#f92672">}</span>,
+    set <span style="color:#f92672">(</span>newVal<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        console.log<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;属性被修改了&#39;</span><span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">})</span>
+</code></pre></div><p>结果如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    obj.hello
+    obj.hello <span style="color:#f92672">=</span> <span style="color:#ae81ff">3000</span>
+    VM964:7 属性被获取了
+    VM964:11 属性被修改了
+    <span style="color:#ae81ff">3000</span>
+</code></pre></div><p>这只是 实现个别数据 可 观测 并不完美
+接下来我们尝试 使用递归的方法 让 Obj 的所有属性 都变为可观测的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">// 源码位置：src/core/observer/index.js
+
+// Observer类会通过递归的方式把一个对象的所有属性都转化成可观测对象
+
+export class Observer <span style="color:#f92672">{</span>
+    constructor <span style="color:#f92672">(</span>value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        this.value <span style="color:#f92672">=</span> value
+        // 给value 新增一个属性 __obj__ ， 值为该value的 Observer实例
+        // 相当于 给 value 打上了标记， 表示他已经被转换成了响应式了， 为了避免重复操作
+        def<span style="color:#f92672">(</span>value, <span style="color:#e6db74">&#39;__obj__&#39;</span>, this<span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>Array.isArray<span style="color:#f92672">(</span>value<span style="color:#f92672">)){</span>
+            // 为数组的 操作逻辑 ...
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            this.walk<span style="color:#f92672">(</span>value<span style="color:#f92672">)</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    walk <span style="color:#f92672">(</span>obj<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        const keys <span style="color:#f92672">=</span> Object.keys<span style="color:#f92672">(</span>obj<span style="color:#f92672">)</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>let i <span style="color:#f92672">=</span> 0; i &lt; keys.length; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            defineReactive<span style="color:#f92672">(</span>obj, keys<span style="color:#f92672">[</span>i<span style="color:#f92672">])</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    /**
+    * 使一个对象转化成可观测对象
+    * @param <span style="color:#f92672">{</span> Object <span style="color:#f92672">}</span> obj 对象
+    * @param <span style="color:#f92672">{</span> String <span style="color:#f92672">}</span> key 对象的key
+    * @param <span style="color:#f92672">{</span> Any <span style="color:#f92672">}</span> val 对象的某个key的值
+    */
+    <span style="color:#66d9ef">function</span> defineReactive <span style="color:#f92672">(</span>obj,key,val<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        // 如果只传了obj和key，那么val <span style="color:#f92672">=</span> obj<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>arguments.length <span style="color:#f92672">===</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            val <span style="color:#f92672">=</span> obj<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>typeof val <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;object&#39;</span><span style="color:#f92672">){</span>
+            // 如果 属性值还是 object 那么重复调用 当前类
+            new Observer<span style="color:#f92672">(</span>val<span style="color:#f92672">)</span>
+        <span style="color:#f92672">}</span>
+        Object.defineProperty<span style="color:#f92672">(</span>obj, key, <span style="color:#f92672">{</span>
+            enumerable: true,
+            configurable: true,
+            get<span style="color:#f92672">(){</span>
+            console.log<span style="color:#f92672">(</span><span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>key<span style="color:#e6db74">}</span>属性被读取了<span style="color:#e6db74">`</span><span style="color:#f92672">)</span>;
+            <span style="color:#66d9ef">return</span> val;
+            <span style="color:#f92672">}</span>,
+            set<span style="color:#f92672">(</span>newVal<span style="color:#f92672">){</span>
+            <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>val <span style="color:#f92672">===</span> newVal<span style="color:#f92672">){</span>
+                <span style="color:#66d9ef">return</span>
+            <span style="color:#f92672">}</span>
+            console.log<span style="color:#f92672">(</span><span style="color:#e6db74">`</span><span style="color:#e6db74">${</span>key<span style="color:#e6db74">}</span>属性被修改了<span style="color:#e6db74">`</span><span style="color:#f92672">)</span>;
+            val <span style="color:#f92672">=</span> newVal;
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">})</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>在上面的代码中，我们定义了observer类，它用来将一个正常的object转换成可观测的object。</p>
+<p>并且给value新增一个<code>__ob__</code>属性，值为该value的<code>Observer</code>实例。</p>
+<p>这个操作相当于为value打上标记，表示它已经被转化成响应式了，避免重复操作然后判断数据的类型，
+只有object类型的数据才会调用<code>walk</code>将每一个属性转换成getter/setter的形式来侦测变化。</p>
+<p>最后，在defineReactive中当传入的属性值还是一个object时使用<code>new observer（val）</code>来递归子属性，这样我们就可以把obj中的所有属性（包括子属性）都转换成<code>getter/seter</code>的形式来侦测变化。</p>
+<p>也就是说，只要我们将一个<code>object</code>传到<code>observer</code>中，那么这个<code>object</code>就会变成可观测的、响应式的<code>object</code>。</p>
+<h3 id="依赖收集">依赖收集</h3>
+<h4 id="什么是依赖收集">什么是依赖收集？</h4>
+<p>我们上面 已经可以侦听 数据的变化了 那我们怎么 让视图更新呢 ， 同时我们不能把整个视图更新一遍 这样做没有意义。
+我们可以 只更新 那些用到这个数据的地方 视图中 谁依赖这个数据 谁就是这个数据的依赖，那依赖收集就是把视图中用到这个数据
+中的所有依赖收集起来，就是依赖收集。</p>
+<h4 id="何时收集依赖何时通知依赖更新">何时收集依赖？何时通知依赖更新？</h4>
+<p>既然我们把数据 变为了可观测的，那么就是说 获取数据 会触发 getter , 更新数据 会触发 setter.
+那么就好办了 我们在获取数据的时候 也就是说 getter的时候 收集依赖就好了，
+在setter 的时候 我们去通知 所有 针对于这个数据的依赖 让他们去更新 依赖即可！</p>
+<p>简述： 在getter 中收集依赖， 在setter 中触发依赖更新！</p>
+<h4 id="依赖收集到哪里去">依赖收集到哪里去？</h4>
+<p>简单理解 依赖收集 那么 依赖 就可能 &gt;= 1 个 是一个集合，那么js 中如果存储一个集合！
+当然是数组了。
+但是说 仅仅用一个数组去存储 依赖 还不够，怎么去 更新依赖呢， 收集依赖的方法呢。
+所以我们可以创建一个依赖收集器， 收集针对当前数据的依赖 并为这些 依赖 创建 收集 和 更新的方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">// 源码位置：src/core/observer/dep.js
+export default class Dep <span style="color:#f92672">{</span>
+  constructor <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    this.subs <span style="color:#f92672">=</span> <span style="color:#f92672">[]</span>
+  <span style="color:#f92672">}</span>
+
+  addSub <span style="color:#f92672">(</span>sub<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    this.subs.push<span style="color:#f92672">(</span>sub<span style="color:#f92672">)</span>
+  <span style="color:#f92672">}</span>
+  // 删除一个依赖
+  removeSub <span style="color:#f92672">(</span>sub<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    remove<span style="color:#f92672">(</span>this.subs, sub<span style="color:#f92672">)</span>
+  <span style="color:#f92672">}</span>
+  // 添加一个依赖
+  depend <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>window.target<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      this.addSub<span style="color:#f92672">(</span>window.target<span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+  // 通知所有依赖更新
+  notify <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    const subs <span style="color:#f92672">=</span> this.subs.slice<span style="color:#f92672">()</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>let i <span style="color:#f92672">=</span> 0, l <span style="color:#f92672">=</span> subs.length; i &lt; l; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      subs<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>.update<span style="color:#f92672">()</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+/**
+ * Remove an item from an array
+ */
+export <span style="color:#66d9ef">function</span> remove <span style="color:#f92672">(</span>arr, item<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>arr.length<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    const index <span style="color:#f92672">=</span> arr.indexOf<span style="color:#f92672">(</span>item<span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>index &gt; -1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> arr.splice<span style="color:#f92672">(</span>index, 1<span style="color:#f92672">)</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>有了依赖管理器后，我们就可以在getter中收集依赖，在setter中通知依赖更新了，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">function</span> defineReactive <span style="color:#f92672">(</span>obj,key,val<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>arguments.length <span style="color:#f92672">===</span> 2<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    val <span style="color:#f92672">=</span> obj<span style="color:#f92672">[</span>key<span style="color:#f92672">]</span>
+  <span style="color:#f92672">}</span>
+  <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>typeof val <span style="color:#f92672">===</span> <span style="color:#e6db74">&#39;object&#39;</span><span style="color:#f92672">){</span>
+    new Observer<span style="color:#f92672">(</span>val<span style="color:#f92672">)</span>
+  <span style="color:#f92672">}</span>
+  const dep <span style="color:#f92672">=</span> new Dep<span style="color:#f92672">()</span>  //实例化一个依赖管理器，生成一个依赖管理数组dep
+  Object.defineProperty<span style="color:#f92672">(</span>obj, key, <span style="color:#f92672">{</span>
+    enumerable: true,
+    configurable: true,
+    get<span style="color:#f92672">(){</span>
+      dep.depend<span style="color:#f92672">()</span>    // 在getter中收集依赖
+      <span style="color:#66d9ef">return</span> val;
+    <span style="color:#f92672">}</span>,
+    set<span style="color:#f92672">(</span>newVal<span style="color:#f92672">){</span>
+      <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>val <span style="color:#f92672">===</span> newVal<span style="color:#f92672">){</span>
+          <span style="color:#66d9ef">return</span>
+      <span style="color:#f92672">}</span>
+      val <span style="color:#f92672">=</span> newVal;
+      dep.notify<span style="color:#f92672">()</span>   // 在setter中通知依赖更新
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">})</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>在上述代码中，我们在getter中调用了dep.depend()方法收集依赖，在setter中调用dep.notify()方法通知所有依赖更新。</p>
+<h3 id="依赖到底是什么">依赖到底是什么？</h3>
+<p>在vue中还实现了一个叫做 <code>Watcher</code> 的类 谁用到了这个数据 谁就是依赖 我们就为哪个谁创建一个  <code>Watcher</code> 
+之后数据变化的时候 我们不直接去通知依赖更新，而是通知依赖对应的 <code>Watch</code> 实例 由 Watcher 实例去通知真正的依赖更新。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">export default class Watcher <span style="color:#f92672">{</span>
+  constructor <span style="color:#f92672">(</span>vm,expOrFn,cb<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    this.vm <span style="color:#f92672">=</span> vm;
+    this.cb <span style="color:#f92672">=</span> cb;
+    this.getter <span style="color:#f92672">=</span> parsePath<span style="color:#f92672">(</span>expOrFn<span style="color:#f92672">)</span>
+    this.value <span style="color:#f92672">=</span> this.get<span style="color:#f92672">()</span>
+  <span style="color:#f92672">}</span>
+  get <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    window.target <span style="color:#f92672">=</span> this;
+    const vm <span style="color:#f92672">=</span> this.vm
+    let value <span style="color:#f92672">=</span> this.getter.call<span style="color:#f92672">(</span>vm, vm<span style="color:#f92672">)</span>
+    window.target <span style="color:#f92672">=</span> undefined;
+    <span style="color:#66d9ef">return</span> value
+  <span style="color:#f92672">}</span>
+  update <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    const oldValue <span style="color:#f92672">=</span> this.value
+    this.value <span style="color:#f92672">=</span> this.get<span style="color:#f92672">()</span>
+    this.cb.call<span style="color:#f92672">(</span>this.vm, this.value, oldValue<span style="color:#f92672">)</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+/**
+ * Parse simple path.
+ * 把一个形如<span style="color:#e6db74">&#39;data.a.b.c&#39;</span>的字符串路径所表示的值，从真实的data对象中取出来
+ * 例如：
+ * data <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>a:<span style="color:#f92672">{</span>b:<span style="color:#f92672">{</span>c:2<span style="color:#f92672">}}}</span>
+ * parsePath<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;a.b.c&#39;</span><span style="color:#f92672">)(</span>data<span style="color:#f92672">)</span>  // <span style="color:#ae81ff">2</span>
+ */
+const bailRE <span style="color:#f92672">=</span> /<span style="color:#f92672">[</span>^<span style="color:#ae81ff">\w</span>.$<span style="color:#f92672">]</span>/
+export <span style="color:#66d9ef">function</span> parsePath <span style="color:#f92672">(</span>path<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bailRE.test<span style="color:#f92672">(</span>path<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span>
+  <span style="color:#f92672">}</span>
+  const segments <span style="color:#f92672">=</span> path.split<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;.&#39;</span><span style="color:#f92672">)</span>
+  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">function</span> <span style="color:#f92672">(</span>obj<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>let i <span style="color:#f92672">=</span> 0; i &lt; segments.length; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!obj<span style="color:#f92672">)</span> <span style="color:#66d9ef">return</span>
+      obj <span style="color:#f92672">=</span> obj<span style="color:#f92672">[</span>segments<span style="color:#f92672">[</span>i<span style="color:#f92672">]]</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">return</span> obj
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>分析下 <code>Watcher</code> 类 代码的实现逻辑
+在构造函数中 先去调用了 <code>this.get()</code> 实例方法在 <code>get()</code> 方法中
+把 自身 赋值给了一个全局的一个唯一 对象 <code>window.target</code> 然后通过 <code>let value = this.getter.call(vm, vm)</code> 获取一下被依赖的数据
+获取依赖数据的目的是触发该数据上面的<code>getter</code> 然后 在 <code>getter</code> 方法里面会调用实例化的 dep 中的 <code>dep.depend()</code> 收集依赖
+在 <code>dep.depend()</code> 方法中 取到挂载 <code>window.target</code> 的值 并将值存入依赖的数组中 在 get() 方法最后 将 <code>window.target</code> 释放。</p>
+<p><img src="http://localhost:1313/20210202/001.png" alt="22" loading="lazy" ></p>
+<h3 id="不足之处">不足之处</h3>
+<p>虽然我们通过<code>Object.defineProperty</code>方法实现了对<code>object</code>数据的可观测，但是这个方法仅仅只能观测到<code>object</code>数据的取值及设置值，当我们向<code>object</code>数据里添加一对新的<code>key/value</code>或删除一对已有的<code>key/value</code>时，它是无法观测到的，导致当我们对object数据添加或删除值时，无法通知依赖，无法驱动视图进行响应式更新。</p>
+<p>当然，Vue也注意到了这一点，为了解决这一问题，Vue增加了两个全局API:<code>Vue.set</code>和<code>Vue.delete</code></p>
+<h2 id="array-变化的侦测">Array 变化的侦测</h2>
+<p>未完待续</p>
 <p><em>写的不对，还请<strong>批评</strong>。</em></p>
 
     </div>
